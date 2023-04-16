@@ -3,38 +3,39 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "components/Appointment/index";
+import getAppointmentsForDay from "../helpers/selectors"
 
 //Appointment Data
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-    interview: {
-      student: "Archie Cohen",
-      interviewer: {
-        id: 2,
-        name: "Tori Malcolm",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  }
-];
+// const appointments = [
+//   {
+//     id: 1,
+//     time: "12pm",
+//   },
+//   {
+//     id: 2,
+//     time: "1pm",
+//     interview: {
+//       student: "Lydia Miller-Jones",
+//       interviewer: {
+//         id: 1,
+//         name: "Sylvia Palmer",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   },
+//   {
+//     id: 3,
+//     time: "2pm",
+//     interview: {
+//       student: "Archie Cohen",
+//       interviewer: {
+//         id: 2,
+//         name: "Tori Malcolm",
+//         avatar: "https://i.imgur.com/LpaY82x.png",
+//       }
+//     }
+//   }
+// ];
 
 export default function Application(props) {
 
@@ -46,22 +47,33 @@ export default function Application(props) {
     days: [],
     appointments: {}
   });
+
+  let dailyAppointments = getAppointmentsForDay(state, state.day);
+
   const setDay = day => {
     console.log("day from setDay:", day);
-    return setState({ ...state, day:day })};
+    return setState({ ...state, day })};
 
   // setState(prev => ({ ...prev, days }));
-  const setDays = (days) => {
+  // const setDays = (days) => {
     
-    setState(prev => setState({...prev, days}));
-  }
+  //   setState(prev => setState({...prev, days}));
+  // }
 
   useEffect(()=>{
     const dayURL = "http://localhost:8001/api/days";
-    axios.get(dayURL).then(response =>{
-      console.log(response.data)
-      setDays([...response.data]);
+    // axios.get(dayURL).then(response =>{
+    //   console.log(response.data)
+    //   setDays([...response.data]);
+    const appointmentURL="http://localhost:8001/api/appointments";
     })
+
+    Promise.all([
+      axios.get(dayURL),
+      axios.get(appointmentURL)
+    ]).then((all) =>{
+      
+      setState(prev=>({...prev, days:all[0].data, appointments:all[1].data}));
   },[]);
 
   // const days = [
@@ -106,7 +118,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
-        {appointments.map(appointment =>{
+        {dailyAppointments.map(appointment =>{
           //If we want every key in an object to become a prop for a component, we can spread the object into the props definition
           return <Appointment key={appointment.id} {...appointment} />
         })}
