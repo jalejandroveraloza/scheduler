@@ -1,4 +1,4 @@
-export default function getAppointmentsForDay(state, name) {
+export function getAppointmentsForDay(state, name) {
   //I can also use find instead of filter
   const filteredDays = state.days.filter(day => day.name === name);
   // console.log("filteredDays: ",filteredDays);
@@ -30,3 +30,12 @@ export default function getAppointmentsForDay(state, name) {
   }
   return filteredAppointments;
 }
+
+  export  function getInterview(state, interview) {
+    if(!interview) return null;
+    const filteredInterview = {};
+    filteredInterview.student = interview.student;
+    filteredInterview.interviewer = state.interviewers[interview.interviewer];
+    return filteredInterview;
+  
+  }
