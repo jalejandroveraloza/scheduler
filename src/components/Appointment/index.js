@@ -10,6 +10,7 @@ import useVisualMode from "../../hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 export default function Appointment(props) {
 
@@ -19,6 +20,9 @@ export default function Appointment(props) {
   const SAVING = "SAVING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
+  const DELETING = "DELETING";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -32,18 +36,22 @@ export default function Appointment(props) {
     transition(SAVING);
 
     //in Application.js, we used return axios which will return a promise, so we need to use .then() here,  .then uses an anonymous callback function
-    props.bookInterview(props.id, interview).then(() => {
-
-      transition(SHOW);
-    }
-    );
+    props.bookInterview(props.id,interview)
+    .then(()=>{transition(SHOW)})
+    .catch(() => transition(ERROR_SAVE,true));
   }
 
 
   function remove() {
+    transition(DELETING,true);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
+      .catch(() => {
+        console.log("inside the catch block........");
+        transition(ERROR_DELETE,true)
+  
+       });
 
   }
 
@@ -88,8 +96,26 @@ export default function Appointment(props) {
           onCancel={back}
         />
 
-      )
-      }
+        )}
+        {mode === DELETING && (
+        <Status
+          message="Deleting"
+        />
+      )}
+
+      {mode === ERROR_SAVE && (
+        <Error
+          message="Could not save appointment."
+          onClose={back}
+        />
+      )}
+
+      {mode === ERROR_DELETE && (
+        <Error
+          message="Could not cancel appointment."
+          onClose={back}
+        />
+      )}
     </article>
   )
 }
