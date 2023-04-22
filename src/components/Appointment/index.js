@@ -11,13 +11,14 @@ import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
 
-export default function Appointment(props){
+export default function Appointment(props) {
 
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
   const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -31,7 +32,7 @@ export default function Appointment(props){
     transition(SAVING);
 
     //in Application.js, we used return axios which will return a promise, so we need to use .then() here,  .then uses an anonymous callback function
-    props.bookInterview(props.id,interview).then(()=>{
+    props.bookInterview(props.id, interview).then(() => {
 
       transition(SHOW);
     }
@@ -39,43 +40,56 @@ export default function Appointment(props){
   }
 
 
-  function remove(){
+  function remove() {
 
     props.cancelInterview(props.id)
-    .then(() => transition(EMPTY))
+      .then(() => transition(EMPTY))
 
   }
 
   return (
     <article className="appointment">
-      <Header time={props.time}/>
-      
+      <Header time={props.time} />
+
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
-      <Show
-      interview={props.interview}
-      onDelete={()=>transition(CONFIRM)}
-      />
+        <Show
+          interview={props.interview}
+          onDelete={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
+        />
       )}
       {mode === CREATE && (
         <Form
-        interviewer={props.interviewer}
-        interviewers={props.interviewers}
-        onCancel={() => back(EMPTY)}
-        bookInterview={props.bookInterview} 
-        onSave={save}/>
-     )}
-     {mode === SAVING && (
-       <Status />
+          interviewer={props.interviewer}
+          interviewers={props.interviewers}
+          onCancel={() => back(EMPTY)}
+          bookInterview={props.bookInterview}
+          onSave={save} />
+      )}
+      {mode === SAVING && (
+        <Status />
       )}
       {mode === CONFIRM && (
         <Confirm
-        onConfirm={remove}
-        onCancel={back}
-        message="Are you sure you would like to delete?"
+          onConfirm={remove}
+          onCancel={back}
+          message="Are you sure you would like to delete?"
         />
 
       )}
+
+      {mode === EDIT && (
+        <Form
+          // name={props.interview.student}
+          interviewer={props.interviewer}
+          interviewers={props.interviewers}
+          onSave={save}
+          onCancel={back}
+        />
+
+      )
+      }
     </article>
   )
 }
