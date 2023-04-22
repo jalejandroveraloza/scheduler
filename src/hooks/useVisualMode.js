@@ -24,16 +24,16 @@ export default function useVisualMode(initial){
     
     if(history.length > 1) {
 
-            console.log("1:", history, history.length);
+            //console.log("1:", history, history.length);
 
             setHistory(history.slice(0, -1));
-            console.log("2:", history, history.length);
+            //console.log("2:", history, history.length);
             setMode(history[history.length-2]);
-            console.log("3: ", history, history.length);
+            //console.log("3: ", history, history.length);
 
     }
     }
-    console.log("mode before final return:", mode);
+    //console.log("mode before final return:", mode);
 
   return { mode, transition, back};
 }
