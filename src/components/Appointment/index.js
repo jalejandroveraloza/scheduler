@@ -76,7 +76,7 @@ export default function Appointment(props) {
           onSave={save} />
       )}
       {mode === SAVING && (
-        <Status />
+        <Status message="Saving"/>
       )}
       {mode === CONFIRM && (
         <Confirm
