@@ -119,15 +119,19 @@ export default function useApplicationData() {
 
     const url =`http://localhost:8001/api/appointments/${id}`;
 
-    let req={
-      url,
-      method: 'DELETE',
-      data:appointment
-    }
-    return axios(req).then(response =>{
-      //console.log("response from delete axios===>",response);
-      setState({...state, appointments, days});
-    })
+    // let req={
+    //   url,
+    //   method: 'DELETE',
+    //   data:appointment
+    // }
+    // return axios(req).then(response =>{
+    //   //console.log("response from delete axios===>",response);
+    //   setState({...state, appointments, days});
+    // })
+
+    return axios.delete(url, appointment).then(()=>{
+      setState({...state, appointments, days });
+    });
 
   }
 
