@@ -18,14 +18,14 @@ describe("Appointments", () => {
 
     //choose an interviewer
     cy.get("[alt='Sylvia Palmer']").click();
-
+    
     //click the save button
     cy.contains("Save").click();
 
     //show the student and interviewers names:
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
-
+    
   });
   it("should edit an interview",()=>{
     cy.get("[alt=Edit]")
@@ -46,11 +46,18 @@ describe("Appointments", () => {
   it("should cancel an interview",()=>{
     //Clicks the delete button for the existing appointment
     cy.get("[alt=Delete]")
-    .first()
-    .click({force:true});
+    .click({ force: true });
 
     //Clicks the confirm button
     cy.contains("Confirm").click();
+    
+    //check that the "Deleting" indicator should exist
+    cy.contains("Deleting").should("exist");
+    //Then check that the "Deleting" indicator should not exist.
+    cy.contains("Deleting").should("not.exist");
+
+    cy.contains(".appointment__card--show", "Archie Cohen")
+    .should("not.exist");
 
   });
 
