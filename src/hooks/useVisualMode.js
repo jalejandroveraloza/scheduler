@@ -1,7 +1,7 @@
 import {useState} from "react";
 
 export default function useVisualMode(initial){
-  //I used let instead of const
+  
   let [mode, setMode] = useState(initial);
   let [history, setHistory] = useState([initial]); 
 
@@ -11,29 +11,19 @@ export default function useVisualMode(initial){
     if(replace){
       setHistory(prev => prev.slice(0, -1));
       setHistory(prev => [...prev, nextMode]);
-      
       }else{
-        setHistory(prev => [...prev, nextMode]);
-        
+        setHistory(prev => [...prev, nextMode]); 
       }
       setMode(nextMode);
   }
 
   //back function
   function back() {
-    
     if(history.length > 1) {
-
-            //console.log("1:", history, history.length);
-
-            setHistory(history.slice(0, -1));
-            //console.log("2:", history, history.length);
-            setMode(history[history.length-2]);
-            //console.log("3: ", history, history.length);
-
+      setHistory(history.slice(0, -1));
+      setMode(history[history.length-2]);
     }
-    }
-    //console.log("mode before final return:", mode);
+  }
 
   return { mode, transition, back};
 }
