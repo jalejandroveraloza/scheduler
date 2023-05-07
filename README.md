@@ -33,9 +33,28 @@ npm run storybook
 ```
 
 ## General view
-
+!["general-view"](https://github.com/jalejandroveraloza/scheduler/blob/master/docs/general-view.png)
 
 ## Booking an appointment
+!["booking-appointment"](https://github.com/jalejandroveraloza/scheduler/blob/master/docs/booking-appointment.png)
 
 
 ## Deleting an appointment 
+!["Deleting-appointment"](https://github.com/jalejandroveraloza/scheduler/blob/master/docs/Deleting-appointment.png)
+
+## API server/*Database Setup
+
+For full functionality both must run concurrently: the client and the API server applications.
+- Start by forking and cloning the scheduler-api server [here](https://github.com/lighthouse-labs/scheduler-api)
+- Follow the steps outlined in README to install and setup the database
+- Fork and clone this repo
+- Navigate to the root directory and install dependencies with `npm install`
+- Once you have the database setup and the scheduler-api server running, run the following command from the root directory of the project `npm start`
+
+## Project Stack
+
+__Front-End:__ React, Axios, JSX, HTML, SASS, JavaScript
+
+__Back-End:__ Express, Node.js, PostgreSQL
+
+__Testing:__ Storybook, Webpack Dev Server, Jest, Testing Library and Cypress
